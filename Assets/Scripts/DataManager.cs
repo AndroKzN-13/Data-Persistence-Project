@@ -1,10 +1,16 @@
 using UnityEngine;
 using System.IO;
+using UnityEngine.UI;
 
 public class DataManager : MonoBehaviour
 {
     public static DataManager Instance;
-    public string PlayerName;
+    public string playerName;
+    public int score;
+    public string bestPlayerName;
+    public int bestScore;
+    public InputField nameField;
+    public Text bestScoreText;
 
     private void Awake()
     {
@@ -16,7 +22,7 @@ public class DataManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        LoadName();
+        LoadProfile();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -32,27 +38,31 @@ public class DataManager : MonoBehaviour
     }
 
     [System.Serializable]
-    class SaveData
+    public class SaveData
     {
-        public string PlayerName;
+        public string bestPlayerName;
+        public int bestScore;
     }
 
-    public void SaveName()
+    public void SaveProfile()
     {
         SaveData data = new SaveData();
-        data.PlayerName = PlayerName;
+        data.bestPlayerName = bestPlayerName;
+        data.bestScore = bestScore;
         string json = JsonUtility.ToJson(data);
         File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
     }
 
-    public void LoadName()
+    public void LoadProfile()
     {
         string path = Application.persistentDataPath + "/savefile.json";
         if(File.Exists(path))
         {
             string json = File.ReadAllText(path);
             SaveData data = JsonUtility.FromJson<SaveData>(json);
-            PlayerName = data.PlayerName;
+            bestPlayerName = data.bestPlayerName;
+            bestScore = data.bestScore;
+            bestScoreText.text = $"Best Score: {bestPlayerName} : {bestScore}";
         }
     }
 }

@@ -1,16 +1,18 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
 public class MenuUIHandler : MonoBehaviour
 {
-    public string PlayerName;
+    public InputField nameField;
+    public Text bestScoreText;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        bestScoreText.text = $"Best Score : {DataManager.Instance.bestPlayerName} : {DataManager.Instance.bestScore}";
     }
 
     // Update is called once per frame
@@ -19,9 +21,15 @@ public class MenuUIHandler : MonoBehaviour
         
     }
 
+    public void ReturnMainMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
     public void StartNew()
     {
         SceneManager.LoadScene(1);
+        DataManager.Instance.playerName = nameField.text;
     }
 
     public void HighScorePage()
@@ -36,11 +44,13 @@ public class MenuUIHandler : MonoBehaviour
 
     public void Quit()
     {
-        DataManager.Instance.SaveName();
+        DataManager.Instance.SaveProfile();
         #if UNITY_EDITOR
             EditorApplication.ExitPlaymode();
         #else
             Application.Quit;
         #endif
     }
+
+    
 }

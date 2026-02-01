@@ -16,6 +16,7 @@ public class MainManager : MonoBehaviour
     
     private bool m_Started = false;
     private int m_Points;
+    public 
     
     // Start is called before the first frame update
     void Start()
@@ -74,6 +75,8 @@ public class MainManager : MonoBehaviour
             DataManager.Instance.bestScore = m_Points;
             DataManager.Instance.bestPlayerName = DataManager.Instance.playerName;
             bestScoreText.text = $"Best Score : {DataManager.Instance.bestPlayerName} : {DataManager.Instance.bestScore}";
+            DataManager.Instance.SaveProfile();
+            DataManager.Instance.AddHighScore(DataManager.Instance.bestPlayerName, DataManager.Instance.bestScore);
         } 
     }
 }

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - NameInput
   - BestScore
+  - HighScore
   layers:
   - Default
   - TransparentFX

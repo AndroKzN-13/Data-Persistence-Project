@@ -5,8 +5,8 @@ using UnityEngine.UI;
 using System.Linq;
 public class HighScoresManager : MonoBehaviour
 {
-    public Text displayNames;
-    public Text displayScores;
+    public Text[] displayNames;
+    public Text[] displayScores;
     public Transform[] scoreEntry;
     public Transform wrapper;
     public int maxScores = 10;
@@ -27,11 +27,8 @@ public class HighScoresManager : MonoBehaviour
     {
         for(int i = 0; i < maxScores; i++)
         {
-            Instantiate(displayNames, scoreEntry[i]);
-            Instantiate(displayScores, scoreEntry[i]);
-            displayNames.text = DataManager.Instance.highScores[i].bestPlayerName;
-            displayScores.text = DataManager.Instance.highScores[i].bestScore.ToString();
-            Debug.Log(displayScores);
+            displayNames[i].text = DataManager.Instance.highScores[i].bestPlayerName;
+            displayScores[i].text = DataManager.Instance.highScores[i].bestScore.ToString();
         }
     }
 }

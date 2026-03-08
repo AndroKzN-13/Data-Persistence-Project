@@ -20,6 +20,18 @@ public class MainManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        /*if(SettingManager.difficultyButton == Easy)
+        {
+            time.TimeScale = 1.0f;
+        }else if(SettingManager.difficultyButton == Medium)
+        {
+            time.TimeScale = 1.5f;
+        }
+        else if(SettingManager.difficultyButton == Hard)
+        {   
+            time.TimeScale = 2.0f;
+        }*/
+
         ScoreText.text = $" Score : {DataManager.Instance.playerName} : {m_Points}";
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);

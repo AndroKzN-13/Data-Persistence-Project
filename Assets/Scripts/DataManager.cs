@@ -14,7 +14,10 @@ public class DataManager : MonoBehaviour
     public InputField nameField;
     public Text bestScoreText;
     public Text highScoreList;
-
+    public SettingManager settingManager;
+    public Toggle musicEnabled;
+    public Slider volumeSlider;
+    public Button[] difficultyButton;
     public List<SaveData> highScores = new List<SaveData>();
     private const int maxScores = 10;
 
@@ -30,6 +33,7 @@ public class DataManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         LoadProfile();
         DisplayHighScores();
+        LoadSetting();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -64,6 +68,14 @@ public class DataManager : MonoBehaviour
         {
             highScores = scores;
         }
+    }
+
+    [System.Serializable]
+    public class SettingData
+    {
+        public bool musicEnabled = true;
+        public float volumeSlider = 0.25f;
+        public int difficultyButton = 0;
     }
 
     public void SaveProfile()
@@ -106,6 +118,74 @@ public class DataManager : MonoBehaviour
             string json = File.ReadAllText(path);
             HighScoreListWrapper wrapper = JsonUtility.FromJson<HighScoreListWrapper>(json);
             highScores = wrapper.highScores;
+        }
+    }
+
+    public void SaveSetting()
+    {
+        SettingData setting = new SettingData();
+        string json = JsonUtility.ToJson(setting, true);
+        File.WriteAllText(Application.persistentDataPath + "/setting.json", json);
+        Debug.Log("Saved: music enabled = " + musicEnabled);
+    }
+
+    public void LoadSetting()
+    {
+        string path = Application.persistentDataPath + "/setting.json";
+        if(File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            SettingData setting = JsonUtility.FromJson<SettingData>(json);
+            musicEnabled.isOn = setting.musicEnabled;
+            volumeSlider.value = setting.volumeSlider;
+            UpdateDifficultyUI();
+        }
+    }
+
+    public void SetMusic(bool isOn)
+    {
+        SettingData setting = new SettingData();
+        setting.musicEnabled = isOn;
+        SaveSetting();
+    }
+
+    public void SetVolume(float value)
+    {
+        SettingData setting = new SettingData();
+        setting.volumeSlider = value;
+        SaveSetting();
+    }
+
+    public void SetDifficulty(int difficultyButton)
+    {
+        SettingData setting = new SettingData();
+        setting.difficultyButton = difficultyButton;
+        SaveSetting();
+        UpdateDifficultyUI();
+    }
+
+    public void ApplyDifficulty(int difficulty)
+    {
+        if(difficulty == 0)
+        {
+            Time.timeScale = 1.0f;
+        }
+        else if(difficulty == 1)
+        {
+            Time.timeScale = 1.5f;
+        }
+        else if(difficulty == 2)
+        {
+            Time.timeScale = 2.0f;
+        }
+    }
+
+    public void UpdateDifficultyUI()
+    {
+        SettingData setting = new SettingData();
+        for(int i = 0; i < difficultyButton.Length; i++)
+        {
+            difficultyButton[i].interactable = (i != setting.difficultyButton);
         }
     }
 }

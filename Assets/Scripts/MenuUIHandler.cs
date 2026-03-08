@@ -21,8 +21,14 @@ public class MenuUIHandler : MonoBehaviour
         
     }
 
-    public void ReturnMainMenu()
+    public void ReturnFromHighScore()
     {
+        SceneManager.LoadScene(0);
+    }
+
+    public void ReturnFromSetting()
+    {
+        DataManager.Instance.SaveSetting();
         SceneManager.LoadScene(0);
     }
 
